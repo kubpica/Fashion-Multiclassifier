@@ -27,13 +27,25 @@ images_train = np.array(images_train)
 images_test = np.array(images_test)
 
 
-multi_classifier = LogisticRegression(verbose=1, max_iter=10, multi_class="multinomial", solver="sag")
+multinomial_classifier = LogisticRegression(verbose=1, max_iter=10, multi_class="multinomial", solver="sag")
 
-multi_classifier.fit(images_train, y_train)
+multinomial_classifier.fit(images_train, y_train)
 
-conf_matrix = confusion_matrix(y_test, multi_classifier.predict(images_test))
-print("Confusion_matrix:")
+conf_matrix = confusion_matrix(y_test, multinomial_classifier.predict(images_test))
+print("Confusion matrix of multinomial classifier:")
 print(conf_matrix)
 sns.heatmap(conf_matrix)
 
-multi_classifier.score(images_test, y_test)
+print("Score of multinomial classifier:")
+multinomial_classifier.score(images_test, y_test)
+
+ovr_classifier = OneVsRestClassifier(LogisticRegression(verbose=1, max_iter=10))
+ovr_classifier.fit(images_train, y_train);
+
+conf_matrix = confusion_matrix(y_test, ovr_classifier.predict(images_test))
+print("Confusion matrix of OvR classifier:")
+print(conf_matrix)
+sns.heatmap(conf_matrix)
+
+print("Score of of OvR classifier:")
+ovr_classifier.score(images_test, y_test)
